@@ -1,0 +1,31 @@
+import { Artist } from "../artist/Artist";
+import { Collection } from "../collection/Collection";
+import { JsonValue } from "type-fest";
+import { Tag } from "../tag/Tag";
+import { Variant } from "../variant/Variant";
+
+export type Product = {
+  artist?: Artist | null;
+  artistName: string | null;
+  artistWikidata: string | null;
+  artworkWikidata: string | null;
+  collections?: Array<Collection>;
+  createdAt: Date;
+  description: string | null;
+  featuredImage: JsonValue;
+  handle: string | null;
+  hasOnlyDefaultVariant: boolean | null;
+  id: string;
+  images: JsonValue;
+  metaDescription: string | null;
+  metafields: JsonValue;
+  metaTitle: string | null;
+  orientation?: Array<"Horizontal" | "Vertical">;
+  status?: Array<"Archived" | "Active" | "Draft">;
+  storefrontId: string | null;
+  tags?: Array<Tag>;
+  title: string | null;
+  translations: JsonValue;
+  updatedAt: Date;
+  variants?: Array<Variant>;
+};
