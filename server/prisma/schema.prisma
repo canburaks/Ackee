@@ -1,0 +1,140 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     String[]
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Product {
+  artist                Artist?                  @relation(fields: [artistId], references: [id])
+  artistId              String?
+  artistName            String?
+  artistWikidata        String?
+  artworkWikidata       String?
+  collections           Collection[]
+  createdAt             DateTime                 @default(now())
+  description           String?
+  featuredImage         Json?
+  handle                String?                  @unique
+  hasOnlyDefaultVariant Boolean?
+  id                    String                   @id @default(cuid())
+  images                Json?
+  metaDescription       String?
+  metafields            Json?
+  metaTitle             String?
+  orientation           EnumProductOrientation[]
+  status                EnumProductStatus[]
+  storefrontId          String?
+  tags                  Tag[]
+  title                 String?
+  translations          Json?
+  updatedAt             DateTime                 @updatedAt
+  variants              Variant[]
+}
+
+model Collection {
+  createdAt       DateTime               @default(now())
+  data            Json?
+  description     String?
+  handle          String?
+  id              String                 @id @default(cuid())
+  image           Json?
+  metaDescription String?
+  metaTitle       String?
+  products        Product[]
+  status          EnumCollectionStatus[]
+  tags            Tag[]
+  title           String?
+  translations    Json?
+  updatedAt       DateTime               @updatedAt
+}
+
+model Artist {
+  createdAt       DateTime  @default(now())
+  data            Json?
+  description     String?
+  handle          String?   @unique
+  id              String    @id @default(cuid())
+  metaDescription String?
+  metaTitle       String?
+  products        Product[]
+  tag             Tag[]
+  title           String?
+  translations    Json?
+  updatedAt       DateTime  @updatedAt
+  wikidata        String?
+}
+
+model Tag {
+  artists         Artist[]
+  collections     Collection[]
+  createdAt       DateTime     @default(now())
+  description     String?
+  handle          String?      @unique
+  id              String       @id @default(cuid())
+  metaDescription String?
+  metaTitle       String?
+  products        Product[]
+  title           String?
+  updatedAt       DateTime     @updatedAt
+}
+
+model Variant {
+  createdAt DateTime             @default(now())
+  id        String               @id @default(cuid())
+  material  EnumVariantMaterial?
+  option    EnumVariantOption?
+  price     Float
+  product   Product?             @relation(fields: [productId], references: [id])
+  productId String?
+  size      EnumVariantSize?
+  sku       String               @unique
+  updatedAt DateTime             @updatedAt
+}
+
+enum EnumProductOrientation {
+  Horizontal
+  Vertical
+}
+
+enum EnumProductStatus {
+  Archived
+  Active
+  Draft
+}
+
+enum EnumCollectionStatus {
+  Archived
+  Active
+  Draft
+}
+
+enum EnumVariantMaterial {
+  basic
+  wooden
+}
+
+enum EnumVariantOption {
+  size
+  material
+}
+
+enum EnumVariantSize {
+  S70x50
+  S50x40
+  S40x30
+  S30x21
+}
